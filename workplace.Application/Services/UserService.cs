@@ -141,7 +141,7 @@ public class UserService: IUserService
 
     private string GenerateToken(User user)
     {
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt_Key"]));
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
 
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
@@ -154,8 +154,8 @@ public class UserService: IUserService
         };
 
         var jwt = new JwtSecurityToken(
-            issuer: _config["Jwt_Issuer"],
-            audience: _config["Jwt_Audience"],
+            issuer: _config["Jwt:Issuer"],
+            audience: _config["Jwt:Audience"],
             claims: claims,
             signingCredentials: credentials,
             expires: DateTime.UtcNow.AddHours(10)
@@ -180,7 +180,7 @@ public class UserService: IUserService
             ValidateIssuer = true,
             ValidateAudience = true,
             ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt_Key"])),
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"])),
             ValidateLifetime = false
         };
 
