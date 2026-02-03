@@ -5,7 +5,7 @@ namespace workplace.Domain.Entities;
 
 public class Place : ITableEntity
 {
-    public string PartitionKey { get; set; }
+    public string PartitionKey { get; set; } = "PLACE";
     public string RowKey { get; set; }
     
     public string Name { get; set; }
