@@ -93,4 +93,107 @@ public class PlaceFucntion
         }
         
     }
+
+    [Function("GetAllPlaces")]
+    public async Task<HttpResponseData> GetAllPlaces(
+        [HttpTrigger(
+            AuthorizationLevel.Anonymous,
+            "get",
+            Route = "places")]
+        HttpRequestData req )
+    {
+        try
+        {
+            HttpResponseData responseData;
+            
+            var places = await _placeService.GetAllPlacesAsync();
+            
+            _logger.LogInformation("Espacios obtenidos de forma exitosa");
+            
+            responseData = req.CreateResponse(HttpStatusCode.Accepted);
+            await responseData.WriteAsJsonAsync(places);
+            return responseData;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error al obtener los espacios");
+            var response = req.CreateResponse(HttpStatusCode.InternalServerError);
+            await response.WriteAsJsonAsync(new { error = "Error interno del servidor " });
+            return response;
+        }
+    }
+
+    [Function("GetUserById")]
+    public async Task<HttpResponseData> GetUserById(
+        [HttpTrigger(
+            AuthorizationLevel.Anonymous,
+            "get",
+            Route = "places/{id}")]
+        HttpRequestData req,
+        string id)
+    {
+        HttpResponseData responseData;
+
+        try
+        {
+            var place = await _placeService.GetPlaceByIdAsync(id);
+
+            _logger.LogInformation("Espacio obtenido de forma exitosa");
+
+            responseData = req.CreateResponse(HttpStatusCode.Accepted);
+            await responseData.WriteAsJsonAsync(place);
+            return responseData;
+        }
+        catch (KeyNotFoundException ex)
+        {
+            _logger.LogError("Usuario no encontrado");
+            var response = req.CreateResponse(HttpStatusCode.NoContent);
+            await response.WriteAsJsonAsync(new { error = ex.Message });
+            return response;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error interno del servidor");
+            var response = req.CreateResponse(HttpStatusCode.InternalServerError);
+            await response.WriteAsJsonAsync(new { error = "Error interno del servidor" });
+            return response;
+        }
+    }
+
+    [Function("DeletePlace")]
+    public async Task<HttpResponseData> DeletePlace(
+        [HttpTrigger(AuthorizationLevel.Anonymous,
+            "delete",
+            Route = "places/{id}")]
+        HttpRequestData req,
+        string id
+        )
+    {
+        try
+        {
+            HttpResponseData response;
+
+            var IsDeleted = await _placeService.DeletePlaceAsync(id);
+
+            _logger.LogInformation("Usuario eliminado de forma exitosa");
+
+            response = req.CreateResponse(HttpStatusCode.NoContent);
+            await response.WriteAsJsonAsync(new { isDeleted = true });
+            return response;
+        }
+        catch (KeyNotFoundException ex)
+        {
+            _logger.LogError(ex.Message);
+            var response = req.CreateResponse(HttpStatusCode.NoContent);
+            await response.WriteAsJsonAsync(new { error = ex.Message });
+            return response;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error interno del servidor");
+            var response = req.CreateResponse(HttpStatusCode.InternalServerError);
+            await response.WriteAsJsonAsync(new { error = "Error interno del servidor" });
+            return response;
+        }
+    }
 }
