@@ -32,11 +32,11 @@ public class PlaceFucntion
             HttpResponseData response;
             // Obtenemos el HttpContext para poder acceder al form-data
             var httpContext = context.GetHttpContext();
-            
+
             if (httpContext == null)
             {
                 response = req.CreateResponse(HttpStatusCode.BadRequest);
-                await response.WriteAsJsonAsync(new {error = "Invalid request context"});
+                await response.WriteAsJsonAsync(new { error = "Invalid request context" });
                 return response;
             }
 
@@ -46,10 +46,10 @@ public class PlaceFucntion
                 !form.ContainsKey("capacity") || !form.ContainsKey("isActive"))
             {
                 response = req.CreateResponse(HttpStatusCode.BadRequest);
-                await response.WriteAsJsonAsync(new { error = "Faltan datos requeridos"});
+                await response.WriteAsJsonAsync(new { error = "Faltan datos requeridos" });
                 return response;
             }
-            
+
             var posterFile = form.Files["poster"];
             var videoFile = form.Files["video"];
 
@@ -77,5 +77,20 @@ public class PlaceFucntion
             await response.WriteAsJsonAsync(place);
             return response;
         }
+        catch (ArgumentNullException ex)
+        {
+            _logger.LogError(ex.Message);
+            var response = req.CreateResponse(HttpStatusCode.BadRequest);
+            await response.WriteAsJsonAsync(new { error = ex.Message });
+            return response;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error interno del servidor");
+            var response = req.CreateResponse(HttpStatusCode.InternalServerError);
+            await response.WriteAsJsonAsync(new { error = "Error interno del servidor" });
+            return response;
+        }
+        
     }
 }

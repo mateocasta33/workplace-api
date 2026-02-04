@@ -1,4 +1,4 @@
-namespace workplace.Infrastructure.Interfaces;
+namespace workplace.Domain.Interfaces;
 
 public interface IPasswordService
 {
