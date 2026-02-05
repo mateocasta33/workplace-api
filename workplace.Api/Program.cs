@@ -7,6 +7,7 @@ using workplace.Application.Interfaces;
 using workplace.Application.Services;
 using workplace.Domain.Interfaces;
 using workplace.Infrastructure.Repositories;
+using workplace.Infrastructure.Services;
 
 var host = new HostBuilder()
     .ConfigureFunctionsWebApplication()
@@ -25,6 +26,8 @@ var host = new HostBuilder()
             
             // Service
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IPasswordService, PasswordService>();
+
             
             // CORS
             services.AddCors(options =>
