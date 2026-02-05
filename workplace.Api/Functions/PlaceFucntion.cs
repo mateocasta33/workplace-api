@@ -123,7 +123,7 @@ public class PlaceFucntion
         }
     }
 
-    [Function("GetUserById")]
+    [Function("GetPlaceById")]
     public async Task<HttpResponseData> GetUserById(
         [HttpTrigger(
             AuthorizationLevel.Anonymous,
