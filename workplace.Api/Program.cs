@@ -27,6 +27,7 @@ var host = new HostBuilder()
             // Service
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IPasswordService, PasswordService>();
+            services.AddScoped<IPlaceService, PlaceService>();
 
             
             // CORS
