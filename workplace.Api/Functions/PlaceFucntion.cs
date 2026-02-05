@@ -62,10 +62,10 @@ public class PlaceFucntion
 
             var placeCreateDto = new PlaceCreateDto
             {
-                name = form.Files["name"].ToString(),
-                description = form.Files["description"].ToString(),
-                capacity = Convert.ToInt32(form.Files["capacity"]),
-                isActive = Convert.ToBoolean(form.Files["isActive"]),
+                name = form["name"].ToString(),  
+                description = form["description"].ToString(),
+                capacity = Convert.ToInt32(form["capacity"]),
+                isActive = Convert.ToBoolean(form["isActive"]),
             };
 
             using var posterStream = posterFile.OpenReadStream();
@@ -78,6 +78,13 @@ public class PlaceFucntion
             return response;
         }
         catch (ArgumentNullException ex)
+        {
+            _logger.LogError(ex.Message);
+            var response = req.CreateResponse(HttpStatusCode.BadRequest);
+            await response.WriteAsJsonAsync(new { error = ex.Message });
+            return response;
+        }
+        catch (InvalidOperationException ex)
         {
             _logger.LogError(ex.Message);
             var response = req.CreateResponse(HttpStatusCode.BadRequest);
@@ -110,9 +117,16 @@ public class PlaceFucntion
             
             _logger.LogInformation("Espacios obtenidos de forma exitosa");
             
-            responseData = req.CreateResponse(HttpStatusCode.Accepted);
+            responseData = req.CreateResponse(HttpStatusCode.OK);
             await responseData.WriteAsJsonAsync(places);
             return responseData;
+        }
+        catch (InvalidOperationException ex)
+        {
+            _logger.LogError(ex.Message);
+            var response = req.CreateResponse(HttpStatusCode.BadRequest);
+            await response.WriteAsJsonAsync(new { error = ex.Message });
+            return response;
         }
         catch (Exception ex)
         {
@@ -151,6 +165,13 @@ public class PlaceFucntion
             await response.WriteAsJsonAsync(new { error = ex.Message });
             return response;
         }
+        catch (InvalidOperationException ex)
+        {
+            _logger.LogError(ex.Message);
+            var response = req.CreateResponse(HttpStatusCode.BadRequest);
+            await response.WriteAsJsonAsync(new { error = ex.Message });
+            return response;
+        }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error interno del servidor");
@@ -185,6 +206,13 @@ public class PlaceFucntion
         {
             _logger.LogError(ex.Message);
             var response = req.CreateResponse(HttpStatusCode.NoContent);
+            await response.WriteAsJsonAsync(new { error = ex.Message });
+            return response;
+        }
+        catch (InvalidOperationException ex)
+        {
+            _logger.LogError(ex.Message);
+            var response = req.CreateResponse(HttpStatusCode.BadRequest);
             await response.WriteAsJsonAsync(new { error = ex.Message });
             return response;
         }

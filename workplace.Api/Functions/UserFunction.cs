@@ -40,6 +40,13 @@ public class UserFunction
             await response.WriteAsJsonAsync(users);
             return response;
         }
+        catch (InvalidOperationException ex)
+        {
+            _logger.LogError(ex.Message);
+            var response = req.CreateResponse(HttpStatusCode.BadRequest);
+            await response.WriteAsJsonAsync(new { error = ex.Message });
+            return response;
+        }
         catch (Exception ex)
         {
             _logger.LogError(ex,"Error al obtener los usuarios");
@@ -75,6 +82,13 @@ public class UserFunction
             return response;
         }
         catch (ArgumentException ex)
+        {
+            _logger.LogError(ex.Message);
+            var response = req.CreateResponse(HttpStatusCode.BadRequest);
+            await response.WriteAsJsonAsync(new { error = ex.Message });
+            return response;
+        }
+        catch (InvalidOperationException ex)
         {
             _logger.LogError(ex.Message);
             var response = req.CreateResponse(HttpStatusCode.BadRequest);
@@ -133,6 +147,13 @@ public class UserFunction
             await response.WriteAsJsonAsync(new { error = ex.Message});
             return response;
         }
+        catch (InvalidOperationException ex)
+        {
+            _logger.LogError(ex.Message);
+            var response = req.CreateResponse(HttpStatusCode.BadRequest);
+            await response.WriteAsJsonAsync(new { error = ex.Message });
+            return response;
+        }
         catch (Exception ex)
         {
             _logger.LogError("Error interno del servidor", ex);
@@ -175,6 +196,13 @@ public class UserFunction
         {
             _logger.LogError(ex.Message);
             var response = req.CreateResponse(HttpStatusCode.Unauthorized);
+            await response.WriteAsJsonAsync(new { error = ex.Message });
+            return response;
+        }
+        catch (InvalidOperationException ex)
+        {
+            _logger.LogError(ex.Message);
+            var response = req.CreateResponse(HttpStatusCode.BadRequest);
             await response.WriteAsJsonAsync(new { error = ex.Message });
             return response;
         }
@@ -223,6 +251,13 @@ public class UserFunction
             await response.WriteAsJsonAsync(new { error = ex.Message });
             return response;
         }
+        catch (InvalidOperationException ex)
+        {
+            _logger.LogError(ex.Message);
+            var response = req.CreateResponse(HttpStatusCode.BadRequest);
+            await response.WriteAsJsonAsync(new { error = ex.Message });
+            return response;
+        }
         catch (Exception ex)
         {
             _logger.LogError("Error interno del servidor", ex.Message);
@@ -252,6 +287,13 @@ public class UserFunction
             _logger.LogError(ex.Message);
             var response = req.CreateResponse(HttpStatusCode.NotFound);
             await response.WriteAsJsonAsync(new { deleted = false});
+            return response;
+        }
+        catch (InvalidOperationException ex)
+        {
+            _logger.LogError(ex.Message);
+            var response = req.CreateResponse(HttpStatusCode.BadRequest);
+            await response.WriteAsJsonAsync(new { error = ex.Message });
             return response;
         }
         catch (Exception ex)
