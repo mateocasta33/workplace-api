@@ -23,11 +23,13 @@ var host = new HostBuilder()
             
             // Repositories
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IPlaceRepository, PlaceRepository>();
             
             // Service
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IPasswordService, PasswordService>();
             services.AddScoped<IPlaceService, PlaceService>();
+            services.AddScoped<PlaceStorageService>();
 
             
             // CORS
