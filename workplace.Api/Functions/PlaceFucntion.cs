@@ -41,6 +41,13 @@ public class PlaceFucntion
             }
 
             var form = await httpContext.Request.ReadFormAsync();
+            
+            _logger.LogWarning($"Form keys: {string.Join(", ", form.Keys)}");
+            _logger.LogWarning($"Files count: {form.Files.Count}");
+            foreach (var file in form.Files)
+            {
+                _logger.LogWarning($"File name: {file.Name}, FileName: {file.FileName}");
+            }
 
             if (!form.ContainsKey("name") || !form.ContainsKey("description") ||
                 !form.ContainsKey("capacity") || !form.ContainsKey("isActive"))
