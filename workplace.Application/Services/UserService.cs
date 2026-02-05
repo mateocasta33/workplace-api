@@ -165,6 +165,7 @@ public class UserService: IUserService
         return new JwtSecurityTokenHandler().WriteToken(jwt);
     }
 
+    
     private string GenerateRefreshToken()
     {
         var array = new byte[36];
