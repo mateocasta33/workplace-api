@@ -34,6 +34,7 @@ public class PlaceStorageService : IPlaceServiceInfrastructure
     private async Task<string> UploadBlobAsync(string containerName, Stream filestream, string filename, string contentType)
     {
         var containerClient = _blobServiceClient.GetBlobContainerClient(containerName);
+        await containerClient.CreateIfNotExistsAsync(PublicAccessType.Blob);
 
         var uniqueFileName = $"{Guid.NewGuid()}_{filename}";
         var blobClient = containerClient.GetBlobClient(uniqueFileName);
