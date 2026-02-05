@@ -141,9 +141,9 @@ public class UserService: IUserService
 
     private string GenerateToken(User user)
     {
-        var jwtKey = _config["Jwt:Key"] ?? _config["Jwt__Key"];
-        var jwtIssuer = _config["Jwt:Issuer"] ?? _config["Jwt__Issuer"] ?? "workplace-api";
-        var jwtAudience = _config["Jwt:Audience"] ?? _config["Jwt__Audience"] ?? "workplace-api";
+        var jwtKey = _config["Jwt__Key"];
+        var jwtIssuer = _config["Jwt__Issuer"];
+        var jwtAudience = _config["Jwt__Audience"];
         
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
 
