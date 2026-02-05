@@ -141,7 +141,11 @@ public class UserService: IUserService
 
     private string GenerateToken(User user)
     {
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
+        var jwtKey = _config["Jwt:Key"] ?? _config["Jwt__Key"];
+        var jwtIssuer = _config["Jwt:Issuer"] ?? _config["Jwt__Issuer"] ?? "workplace-api";
+        var jwtAudience = _config["Jwt:Audience"] ?? _config["Jwt__Audience"] ?? "workplace-api";
+        
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
 
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
@@ -154,8 +158,8 @@ public class UserService: IUserService
         };
 
         var jwt = new JwtSecurityToken(
-            issuer: _config["Jwt:Issuer"],
-            audience: _config["Jwt:Audience"],
+            issuer: jwtIssuer,
+            audience: jwtAudience,
             claims: claims,
             signingCredentials: credentials,
             expires: DateTime.UtcNow.AddHours(10)
@@ -176,12 +180,15 @@ public class UserService: IUserService
 
     private ClaimsPrincipal GetClaimFromExpireToken(string token)
     {
+        
+        var jwtKey = _config["Jwt:Key"] ?? _config["Jwt__Key"];
+        
         var parameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
             ValidateAudience = true,
             ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"])),
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey)),
             ValidateLifetime = false
         };
 
