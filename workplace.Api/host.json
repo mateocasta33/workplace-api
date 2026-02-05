@@ -8,5 +8,15 @@
             },
             "enableLiveMetricsFilters": true
         }
-    }
+    },
+    "extensions": {
+        "http": {
+            "routePrefix": "api",
+            "maxRequestBodySize": 524288000,
+            "maxOutstandingRequests": 200,
+            "maxConcurrentRequests": 100,
+            "dynamicThrottlesEnabled": true
+        }
+    },
+    "functionTimeout": "00:10:00"
 }
