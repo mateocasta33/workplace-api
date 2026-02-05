@@ -50,8 +50,8 @@ public class PlaceFucntion
                 return response;
             }
 
-            var posterFile = form.Files["poster"];
-            var videoFile = form.Files["video"];
+            var posterFile = form.Files.FirstOrDefault(f => f.Name.Contains("poster") || f.FileName.Contains("Screenshot"));
+            var videoFile = form.Files.FirstOrDefault(f => f.Name.Contains("video") || f.FileName.Contains("Screencast"));
 
             if (posterFile == null || videoFile == null)
             {
