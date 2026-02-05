@@ -127,6 +127,8 @@ public class UserRepository: IUserRepository
     {
         try
         {
+            user.RowKey = user.Email;
+            
             await _tableClient.AddEntityAsync(user);
             _logger.LogInformation("Usuario creado de forma exitosa");
             return user;

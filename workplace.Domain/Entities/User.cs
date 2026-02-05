@@ -8,7 +8,8 @@ namespace workplace.Domain.Entities;
 public class User : ITableEntity
 {
     public string PartitionKey { get; set; } = "USER";
-    public string RowKey { get; set; } = Guid.NewGuid().ToString();
+    public string RowKey { get; set; } = string.Empty;
+    public string Id { get; set; }= Guid.NewGuid().ToString();
     
     public string Name { get; set; }
     public string Email { get; set; }
