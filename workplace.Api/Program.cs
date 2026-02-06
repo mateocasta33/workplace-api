@@ -1,5 +1,6 @@
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Builder;
+using Microsoft.Azure.Functions.Worker.Extensions.OpenApi.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using workplace.Application.Dtos;
@@ -12,6 +13,7 @@ using workplace.Infrastructure.Services;
 
 var host = new HostBuilder()
     .ConfigureFunctionsWebApplication()
+    .ConfigureOpenApi() 
     .ConfigureServices(services =>
         {
             services.AddApplicationInsightsTelemetryWorkerService();
