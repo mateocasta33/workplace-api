@@ -60,6 +60,7 @@ public class UserService: IUserService
 
         var newUser = _mapper.Map<User>(user);
         newUser.PasswordHash = BCrypt.Net.BCrypt.HashPassword(user.password);
+        newUser.RowKey = newUser.Email;
 
         return  _mapper.Map<UserResponseDto>(await _repository.CreateUserAsync(newUser));
     }
