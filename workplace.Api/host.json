@@ -3,21 +3,18 @@
     "logging": {
         "applicationInsights": {
             "samplingSettings": {
-                "isEnabled": true,
-                "excludedTypes": "Request"
-            },
-            "enableLiveMetricsFilters": true
+                "isEnabled": true
+            }
+        },
+        "logLevel": {
+            "default": "Information",
+            "Host.Results": "Information",
+            "Function": "Information"
         }
     },
     "extensions": {
         "http": {
-            "routePrefix": "api",
-            "maxRequestBodySize": 524288000,
-            "maxOutstandingRequests": 200,
-            "maxConcurrentRequests": 100,
-            "dynamicThrottlesEnabled": true,
-            "enableChunkedRequestBinding": true
+            "routePrefix": "api"
         }
-    },
-    "functionTimeout": "00:10:00"
+    }
 }
