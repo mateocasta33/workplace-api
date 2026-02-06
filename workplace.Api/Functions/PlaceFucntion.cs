@@ -39,6 +39,10 @@ public class PlaceFucntion
                 await response.WriteAsJsonAsync(new { error = "Invalid request context" });
                 return response;
             }
+            
+            _logger.LogWarning($"Content-Type: {httpContext.Request.ContentType}");
+            _logger.LogWarning($"Content-Length: {httpContext.Request.ContentLength}");
+            _logger.LogWarning($"Has form content type: {httpContext.Request.HasFormContentType}");
 
             var form = await httpContext.Request.ReadFormAsync();
             
