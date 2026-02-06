@@ -15,7 +15,8 @@
             "maxRequestBodySize": 524288000,
             "maxOutstandingRequests": 200,
             "maxConcurrentRequests": 100,
-            "dynamicThrottlesEnabled": true
+            "dynamicThrottlesEnabled": true,
+            "enableChunkedRequestBinding": true
         }
     },
     "functionTimeout": "00:10:00"
