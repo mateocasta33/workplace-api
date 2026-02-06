@@ -77,6 +77,8 @@ public class PlaceFucntion
                 description = form["description"].ToString(),
                 capacity = Convert.ToInt32(form["capacity"]),
                 isActive = Convert.ToBoolean(form["isActive"]),
+                posterFileName = form["posterFileName"].ToString(),
+                videoFileName = form["videoFileName"].ToString()
             };
 
             using var posterStream = posterFile.OpenReadStream();
