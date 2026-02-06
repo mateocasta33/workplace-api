@@ -59,6 +59,7 @@ public class PlaceService: IPlaceService
         var newPlace = _mapper.Map<Place>(placeCreateDto);
         newPlace.ImagesUrl = posterUri;
         newPlace.VideosUrl = videoUri;
+        
 
         return _mapper.Map<PlaceResponseDto>(await _placeRepository.CreatePlaceAsync(newPlace));
     }
