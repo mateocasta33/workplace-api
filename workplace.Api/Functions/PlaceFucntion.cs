@@ -95,6 +95,13 @@ public class PlaceFucntion
             return response;
 
         }
+        catch (InvalidOperationException ex)
+        {
+            _logger.LogError(ex.Message);
+            var response = req.CreateResponse(HttpStatusCode.BadRequest);
+            await response.WriteAsJsonAsync(new { error = ex.Message });
+            return response;
+        }
         catch (Exception e)
         {
             _logger.LogError(e, $"Error completo al crear place: {e.Message}");
