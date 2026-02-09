@@ -30,6 +30,7 @@ public class PlaceFucntion
         try
         {
             HttpResponseData response;
+            
             var httpContext = context.GetHttpContext();
             
             var form = await httpContext.Request.ReadFormAsync();
