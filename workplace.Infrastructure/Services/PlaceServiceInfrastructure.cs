@@ -9,8 +9,8 @@ public class PlaceServiceInfrastructure : IPlaceServiceInfrastructure
 {
     private readonly BlobServiceClient _blobServiceClient;
     private readonly ILogger<PlaceServiceInfrastructure> _logger;
-    private readonly string posterContainer ="poster-container";
-    private readonly string videoContainer ="video-container";
+    private readonly string posterContainer ="places-posters";
+    private readonly string videoContainer ="places-videos";
     
     public PlaceServiceInfrastructure(ILogger<PlaceServiceInfrastructure> logger)
     {
