@@ -15,7 +15,7 @@ public class PlaceServiceInfrastructure : IPlaceServiceInfrastructure
     public PlaceServiceInfrastructure(ILogger<PlaceServiceInfrastructure> logger)
     {
         _logger = logger;
-        var connectionString = Environment.GetEnvironmentVariable("");
+        var connectionString = Environment.GetEnvironmentVariable("StorageConnectionString");
 
         _blobServiceClient = new BlobServiceClient(connectionString);
     }
