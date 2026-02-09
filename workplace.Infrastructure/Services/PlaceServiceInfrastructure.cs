@@ -22,7 +22,7 @@ public class PlaceServiceInfrastructure : IPlaceServiceInfrastructure
     
     public async Task<string> UploadPoster(Stream posterStream, string posterFileName)
     {
-        return await UploadBlobAsync(posterContainer, posterStream, posterFileName, "video/mp4");
+        return await UploadBlobAsync(posterContainer, posterStream, posterFileName, "image/jpeg");
     }
 
     public async Task<string> UploadVideo(Stream videoStream, string videoFileName)
