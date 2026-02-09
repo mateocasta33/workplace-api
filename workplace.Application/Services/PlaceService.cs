@@ -12,21 +12,21 @@ public class PlaceService: IPlaceService
 {
     private readonly ILogger<PlaceService> _logger;
     private readonly IPlaceRepository _placeRepository;
-    private readonly IPlaceServiceInfrastructure _placeService;
+    private readonly IPlaceServiceInfrastructure _serviceInfrastructure;
     private readonly IMapper _mapper;
 
-    public PlaceService(ILogger<PlaceService> logger, IPlaceRepository placeRepository, IPlaceServiceInfrastructure placeService, IMapper mapper)
+    public PlaceService(ILogger<PlaceService> logger, IPlaceRepository placeRepository, IMapper mapper, IPlaceServiceInfrastructure serviceInfrastructure)
     {
         _logger = logger;
         _placeRepository = placeRepository;
-        _placeService = placeService;
+        _serviceInfrastructure = serviceInfrastructure;
         _mapper = mapper;
     }
     
     /// <summary>
     /// Crear espacio 
     /// </summary>
-    public async Task<PlaceResponseDto?> CreatePlaceAsync(PlaceCreateDto placeCreateDto, Stream posterStream, Stream videoStream)
+    public async Task<PlaceResponseDto?> CreatePlaceAsync(PlaceCreateDto placeCreateDto, Stream? posterStream, Stream? videoStream)
     {
         if (placeCreateDto == null)
         {
@@ -52,14 +52,10 @@ public class PlaceService: IPlaceService
             _logger.LogWarning("El video del epacio es requerido");
             throw new ArgumentNullException(nameof(videoStream), "El video del epacio es requerido");
         }
-
-        var posterUri = await _placeService.UploadPosterAsync(posterStream, placeCreateDto.posterFileName);
-        var videoUri = await _placeService.UploadVideoAsync(videoStream, placeCreateDto.videoFileName);
-
-        var newPlace = _mapper.Map<Place>(placeCreateDto);
-        newPlace.ImagesUrl = posterUri;
-        newPlace.VideosUrl = videoUri;
         
+        var newPlace = _mapper.Map<Place>(placeCreateDto);
+        newPlace.ImagesUrl = await _serviceInfrastructure.UploadPoster(posterStream, placeCreateDto.posterFileName);
+        newPlace.VideosUrl = await _serviceInfrastructure.UploadVideo(videoStream, placeCreateDto.videoFileName);
 
         return _mapper.Map<PlaceResponseDto>(await _placeRepository.CreatePlaceAsync(newPlace));
     }

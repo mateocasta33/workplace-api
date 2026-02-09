@@ -11,8 +11,8 @@ public class PlaceResponseDto
     public string Description { get; set; }
     public int Capacity { get; set; }
     public bool IsActive { get; set; }
-    public string ImagesUrl { get; set; }
-    public string VideosUrl { get; set; }
+    public string? ImagesUrl { get; set; }
+    public string? VideosUrl { get; set; }
     
     public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
     public DateTimeOffset? UpdatedAt { get; set; }

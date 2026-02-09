@@ -66,7 +66,7 @@ public class PlaceRepository : IPlaceRepository
         try
         {
             var response = await _tableClient.AddEntityAsync(place);
-            _logger.LogInformation("Usuario creado de forma exitosa");
+            _logger.LogInformation("Espacio creado de forma exitosa");
             return true;
         }
         catch (RequestFailedException ex)

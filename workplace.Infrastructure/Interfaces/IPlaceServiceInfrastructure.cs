@@ -2,6 +2,6 @@ namespace workplace.Infrastructure.Interfaces;
 
 public interface IPlaceServiceInfrastructure
 {
-    Task<string> UploadPosterAsync(Stream fileStream, string fileName);
-    Task<string> UploadVideoAsync(Stream fileStream, string fileName);
+    Task<string> UploadPoster(Stream posterStream, string posterFileName);
+    Task<string> UploadVideo(Stream posterStream, string posterFileName);
 }

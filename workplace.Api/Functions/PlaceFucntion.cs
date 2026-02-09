@@ -28,90 +28,76 @@ public class PlaceFucntion
     {
         try
         {
-
             HttpResponseData response;
-            // Obtenemos el HttpContext para poder acceder al form-data
             var httpContext = context.GetHttpContext();
-
-            if (httpContext == null)
-            {
-                response = req.CreateResponse(HttpStatusCode.BadRequest);
-                await response.WriteAsJsonAsync(new { error = "Invalid request context" });
-                return response;
-            }
             
-            _logger.LogWarning($"Content-Type: {httpContext.Request.ContentType}");
-            _logger.LogWarning($"Content-Length: {httpContext.Request.ContentLength}");
-            _logger.LogWarning($"Has form content type: {httpContext.Request.HasFormContentType}");
-
             var form = await httpContext.Request.ReadFormAsync();
-            
-            _logger.LogWarning($"Form keys: {string.Join(", ", form.Keys)}");
-            _logger.LogWarning($"Files count: {form.Files.Count}");
-            foreach (var file in form.Files)
-            {
-                _logger.LogWarning($"File name: {file.Name}, FileName: {file.FileName}");
-            }
 
-            if (!form.ContainsKey("name") || !form.ContainsKey("description") ||
-                !form.ContainsKey("capacity") || !form.ContainsKey("isActive"))
+            var fileVideo = form.Files["video"];
+            var filePoster = form.Files["poster"];
+
+            if (filePoster == null || fileVideo == null)
             {
+                _logger.LogError("Todos los campos son requeridos");
                 response = req.CreateResponse(HttpStatusCode.BadRequest);
-                await response.WriteAsJsonAsync(new { error = "Faltan datos requeridos" });
+                await response.WriteAsJsonAsync(new { error = "El poster y el video son requeridos" });
                 return response;
             }
 
-            var posterFile = form.Files["poster"];
-            var videoFile = form.Files["video"];
-
-            if (posterFile == null || videoFile == null)
+            if (!form.ContainsKey("name") || !form.ContainsKey("description") || !form.ContainsKey("capacity") ||
+                !form.ContainsKey("isActive") || !form.ContainsKey("posterFileName") ||
+                !form.ContainsKey("videoFileName"))
             {
+                _logger.LogError("Todos los campos son requeridos");
                 response = req.CreateResponse(HttpStatusCode.BadRequest);
-                await response.WriteAsJsonAsync(new { error = "Poster y video son requeridos" });
+                await response.WriteAsJsonAsync(new { error = "Todos los cambos son requeridos"});
                 return response;
             }
 
-            var placeCreateDto = new PlaceCreateDto
+            if (!form.ContainsKey("isActive") ||
+                !bool.TryParse(form["isActive"], out var isActive))
             {
-                name = form["name"].ToString(),  
+                _logger.LogError("Todos los campos son requeridos");
+                response = req.CreateResponse(HttpStatusCode.BadRequest);
+                await response.WriteAsJsonAsync(new { error = "Todos los cambos son requeridos"});
+                return response;
+            }
+
+            if (!form.ContainsKey("capacity") ||
+                !int.TryParse(form["capacity"], out var capacity))
+            {
+                _logger.LogError("Todos los campos son requeridos");
+                response = req.CreateResponse(HttpStatusCode.BadRequest);
+                await response.WriteAsJsonAsync(new { error = "Todos los cambos son requeridos"});
+                return response;
+            }
+
+            var newPlace = new PlaceCreateDto
+            {
+                name = form["name"].ToString(),
+                capacity = capacity,
                 description = form["description"].ToString(),
-                capacity = Convert.ToInt32(form["capacity"]),
-                isActive = Convert.ToBoolean(form["isActive"]),
                 posterFileName = form["posterFileName"].ToString(),
-                videoFileName = form["videoFileName"].ToString()
+                videoFileName = form["videoFileName"].ToString(),
+                isActive = isActive,
             };
 
-            using var posterStream = posterFile.OpenReadStream();
-            using var videoStream = videoFile.OpenReadStream();
-
-            var place = await _placeService.CreatePlaceAsync(placeCreateDto, posterStream, videoStream);
+            var posterStream = filePoster.OpenReadStream();
+            var videoStream = fileVideo.OpenReadStream();
+            
+            _logger.LogInformation("Espacio creandoce");
+            var result = await _placeService.CreatePlaceAsync(newPlace, posterStream, videoStream);
 
             response = req.CreateResponse(HttpStatusCode.Created);
-            await response.WriteAsJsonAsync(place);
+            await response.WriteAsJsonAsync(result);
             return response;
+
         }
-        catch (ArgumentNullException ex)
+        catch (Exception e)
         {
-            _logger.LogError(ex.Message);
-            var response = req.CreateResponse(HttpStatusCode.BadRequest);
-            await response.WriteAsJsonAsync(new { error = ex.Message });
-            return response;
+            Console.WriteLine(e);
+            throw;
         }
-        catch (InvalidOperationException ex)
-        {
-            _logger.LogError(ex.Message);
-            var response = req.CreateResponse(HttpStatusCode.BadRequest);
-            await response.WriteAsJsonAsync(new { error = ex.Message });
-            return response;
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error interno del servidor");
-            var response = req.CreateResponse(HttpStatusCode.InternalServerError);
-            await response.WriteAsJsonAsync(new { error = "Error interno del servidor" });
-            return response;
-        }
-        
     }
 
     [Function("GetAllPlaces")]
