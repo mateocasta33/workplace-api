@@ -61,13 +61,13 @@ public class PlaceRepository : IPlaceRepository
         }
     }
 
-    public async Task<bool> CreatePlaceAsync(Place place)
+    public async Task<Place> CreatePlaceAsync(Place place)
     {
         try
         {
             var response = await _tableClient.AddEntityAsync(place);
             _logger.LogInformation("Espacio creado de forma exitosa");
-            return true;
+            return place;
         }
         catch (RequestFailedException ex)
         {

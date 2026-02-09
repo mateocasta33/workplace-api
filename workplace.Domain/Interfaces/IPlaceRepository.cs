@@ -7,7 +7,7 @@ public interface IPlaceRepository
 {
     Task<IEnumerable<Place?>> GetAllPlacesAsync();
     Task<Place?> GetPlaceByIdAsync(string id);
-    Task<bool> CreatePlaceAsync(Place place);
+    Task<Place> CreatePlaceAsync(Place place);
     Task<Place?> UpdatePlaceAsync(Place place);
     Task<bool> DeletePlaceAsync(string movieId);
 }
