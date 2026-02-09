@@ -217,7 +217,7 @@ public class PlaceFucntion
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error interno del servidor");
+            _logger.LogError(ex.Message);
             var response = req.CreateResponse(HttpStatusCode.InternalServerError);
             await response.WriteAsJsonAsync(new { error = "Error interno del servidor" });
             return response;
