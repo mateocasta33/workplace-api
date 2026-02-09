@@ -26,6 +26,7 @@ public class PlaceFucntion
         HttpRequestData req,
         FunctionContext context)
     {
+        _logger.LogInformation("Ingreso a la funcion despues de deploy");
         try
         {
             HttpResponseData response;
