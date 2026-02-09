@@ -30,9 +30,9 @@ public class PlaceFucntion
         try
         {
             HttpResponseData response;
-            
+
             var httpContext = context.GetHttpContext();
-            
+
             var form = await httpContext.Request.ReadFormAsync();
 
             var fileVideo = form.Files["video"];
@@ -52,7 +52,7 @@ public class PlaceFucntion
             {
                 _logger.LogError("Todos los campos son requeridos");
                 response = req.CreateResponse(HttpStatusCode.BadRequest);
-                await response.WriteAsJsonAsync(new { error = "Todos los cambos son requeridos"});
+                await response.WriteAsJsonAsync(new { error = "Todos los cambos son requeridos" });
                 return response;
             }
 
@@ -61,7 +61,7 @@ public class PlaceFucntion
             {
                 _logger.LogError("Todos los campos son requeridos");
                 response = req.CreateResponse(HttpStatusCode.BadRequest);
-                await response.WriteAsJsonAsync(new { error = "Todos los cambos son requeridos"});
+                await response.WriteAsJsonAsync(new { error = "Todos los cambos son requeridos" });
                 return response;
             }
 
@@ -70,7 +70,7 @@ public class PlaceFucntion
             {
                 _logger.LogError("Todos los campos son requeridos");
                 response = req.CreateResponse(HttpStatusCode.BadRequest);
-                await response.WriteAsJsonAsync(new { error = "Todos los cambos son requeridos"});
+                await response.WriteAsJsonAsync(new { error = "Todos los cambos son requeridos" });
                 return response;
             }
 
@@ -86,7 +86,7 @@ public class PlaceFucntion
 
             var posterStream = filePoster.OpenReadStream();
             var videoStream = fileVideo.OpenReadStream();
-            
+
             _logger.LogInformation("Espacio creandoce");
             var result = await _placeService.CreatePlaceAsync(newPlace, posterStream, videoStream);
 
@@ -97,9 +97,14 @@ public class PlaceFucntion
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
-            throw;
+            _logger.LogError(e, $"Error completo al crear place: {e.Message}");
+            _logger.LogError($"Stack trace: {e.StackTrace}");
+
+            var response = req.CreateResponse(HttpStatusCode.InternalServerError);
+            await response.WriteAsJsonAsync(new { error = e.Message });
+            return response;
         }
+
     }
 
     [Function("GetAllPlaces")]
